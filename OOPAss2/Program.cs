@@ -66,7 +66,7 @@ namespace CMP1903MA2
     }
     class HumanPlayer : Player
     {
-        
+    
     }
 
     class ComputerPlayer : Player
@@ -77,6 +77,12 @@ namespace CMP1903MA2
     /// <summary>
     /// The die.
     /// </summary>
+    /// 
+    class ScoreCalc
+    {
+        Die Die = new Die();
+
+    }
     class Die
     {
 
