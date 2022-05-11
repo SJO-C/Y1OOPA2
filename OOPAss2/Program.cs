@@ -9,7 +9,7 @@ namespace CMP1903MA2
         static void Main()
         {
             Game NewGame = new Game();
-            
+
         }
     }
 
@@ -21,17 +21,24 @@ namespace CMP1903MA2
         static void GameMain()
         {
             int winScore = 50;
-            Player p1 = new Player();
-            Player p2 = new Player();
-            while (p1.Score < winScore | p2.Score < winScore)
+            Console.Write("Do you wish to play against a [local] player or the Computer?\nC for Computer, L for Local Player:\t");
+            ConsoleKeyInfo usrChoice = Console.ReadKey();
+            if (usrChoice.Key == ConsoleKey.C)
+            {
+                HumanPlayer P1 = new HumanPlayer();
+                ComputerPlayer P2 = new ComputerPlayer();
+            }
+            else if (usrChoice.Key == ConsoleKey.L)
+            {
+                HumanPlayer P1 = new HumanPlayer();
+                HumanPlayer P2 = new HumanPlayer();
+            }
+            while (P1.Score < winScore | P2.Score < winScore)
             {
 
             }
-
-            
-
         }
-        
+
 
     }
 
@@ -50,9 +57,20 @@ namespace CMP1903MA2
             get { return score; }
             set { score = value; }
         }
-
-
+        private int[] roll;
+        public int[] Roll
+        {
+            get { return roll; }
+            set { roll = value; }
+        }
+    }
+    class HumanPlayer : Player
+    {
         
+    }
+
+    class ComputerPlayer : Player
+    {
 
     }
 
