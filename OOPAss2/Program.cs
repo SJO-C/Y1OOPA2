@@ -6,21 +6,28 @@ namespace CMP1903MA2
     /// </summary>
     class Program
     {
+        /// <summary>
+        /// 
+        /// </summary>
         static void Main()
         {
             Game NewGame = new Game();
             NewGame.GameMain();
 
-            Console.WriteLine("to play again enter 1, enter 2 to quit");
+            Console.WriteLine("Play Again? (y/N)");
             ConsoleKeyInfo usrChoice = Console.ReadKey();
-            if (usrChoice.Key == ConsoleKey.D1)
+            if (usrChoice.Key == ConsoleKey.Y)
+            { Main(); }
+            else if (usrChoice.Key == ConsoleKey.N)
             {
-                NewGame.GameMain();
+                Console.WriteLine("Exiting Program Now...");
+                System.Environment.Exit(0);
             }
             else
             {
-                Console.WriteLine("BYE");
-                System.Environment.Exit(0);
+                Console.WriteLine("Invalid Key.");
+                Console.WriteLine("Will Rerun as if Y was pressed...");
+                Main();
             }
         }
     }
@@ -30,35 +37,50 @@ namespace CMP1903MA2
     /// </summary>
     class Game
     {
+        /// <summary>
+        /// Games the main.
+        /// </summary>
         public void GameMain()
         {
-            int winScore = 50;
-            Console.Write("Do you wish to play against a [local] player or the Computer?\nC for Computer, L for Local Player:\t");
+            
+            Console.Write("Do you wish to play against a [local] player, press L for Local Player:\t");
             ConsoleKeyInfo usrChoice = Console.ReadKey();
 
             HumanPlayer P1 = new HumanPlayer();
-            HumanPlayer P2 = new HumanPlayer();
-            ComputerPlayer C1 = new ComputerPlayer();
-            ComputerPlayer c2 = new ComputerPlayer();
-
-            List<int> roll1 =  P1.ROLLS(6);
-            P1.ScoreCalc(roll1);
-            if (usrChoice.Key == ConsoleKey.C)
+            HumanPlayer P2 = new HumanPlayer();   
+            
             {
-                ;
-            }
-            else if (usrChoice.Key == ConsoleKey.L)
-            {
-                ;
-            }
+                while ((P1.Score < Globals.winScore) || (P2.Score < Globals.winScore))
+                {
+                    Console.WriteLine("\nPlayer 1 rolls");
+                    List<int> roll1 = P1.ROLLS(Globals.diceSize); ;
+                    P1.Score = P1.ScoreCalc(roll1, P1.Score);
+                    Console.Write($" Score is {P1.Score}");
+                    Console.WriteLine("\n");
 
-            while ((P1.Score < winScore) || (P2.Score < winScore))
-            {
+                    Console.WriteLine("Player 2 rolls");
+                    List<int> roll2 = P2.ROLLS(Globals.diceSize); ;
+                    P2.Score = P2.ScoreCalc(roll2, P2.Score);
+                    Console.Write($" Score is {P2.Score}");
+                }
 
+                if (P1.Score >= Globals.winScore)
+                { Console.WriteLine("\nPlayer 1 Wins."); }
+                else if (P2.Score >= Globals.winScore)
+                { Console.WriteLine("\nPlayer 2 Wins."); }
             }
         }
 
 
+    }
+
+    /// <summary>
+    /// The globals.
+    /// </summary>
+    static class Globals
+    {
+        public static int diceSize = 6;
+        public static int winScore = 50;
     }
 
     /// <summary>
@@ -77,38 +99,56 @@ namespace CMP1903MA2
             set { score = value; }
         }
         private int[] roll;
+        /// <summary>
+        /// Gets or Sets the roll.
+        /// </summary>
         public int[] Roll
         {
             get { return roll; }
             set { roll = value; }
         }
-        public int ScoreCalc(List<int> rnd_ints)
+        /// <summary>
+        /// Scores the calc.
+        /// </summary>
+        /// <param name="rnd_ints">The rnd_ints.</param>
+        /// <returns>An int.</returns>
+        public int ScoreCalc(List<int> rnd_ints, int player_score)
         {
-            int score = 0;
+            Dictionary<int, int> SocreR = new Dictionary<int, int>();
+            for (int k = 0; k <= Globals.diceSize; k++)
+                foreach (int i in rnd_ints)
+                {
+                    if (rnd_ints[i] == k)
+                    {
+                        if (!SocreR.ContainsKey(k)) { SocreR[k] = 1; }
+                        else { SocreR[k]++; }
+                    }
 
-            var ranks =
-                rnd_ints.GroupBy(s => s)
-                .Where(g => g.count() > 1)
-                .select(k);
-                
-
-            public List<int> countScores(ranks)
+                }
+            if (SocreR.Values.Any(b => b == 5))
             {
-
+                player_score += 12;
             }
-            return score;
+            else if(SocreR.Values.Any(b => b == 4))
+            {
+                player_score += 6;
+            }
+            else if (SocreR.Values.Any(b => b == 3))
+            {
+                player_score += 3;
+            }
+            return player_score;
 
         }
     }
+    /// <summary>
+    /// The human player.
+    /// </summary>
     class HumanPlayer : Player
     {
         
     }
 
-    class ComputerPlayer : Player
-    {
-
-    }
 
     /// <summary>
     /// The die.
@@ -128,6 +168,10 @@ namespace CMP1903MA2
             for (int i = 0; i <= 5; i++)
             {
                 roll.Add(dieRoll.Next(1,sides));
+            }
+            foreach (int j in roll)
+            {
+                Console.Write($" {j}  ");
             }
             return roll;
         }
