@@ -9,10 +9,10 @@ namespace CMP1903MA2
         static void Main()
         {
             Game NewGame = new Game();
-            ConsoleKeyInfo usrChoice = Console.ReadKey();
             NewGame.GameMain();
 
             Console.WriteLine("to play again enter 1, enter 2 to quit");
+            ConsoleKeyInfo usrChoice = Console.ReadKey();
             if (usrChoice.Key == ConsoleKey.D1)
             {
                 NewGame.GameMain();
@@ -20,7 +20,7 @@ namespace CMP1903MA2
             else
             {
                 Console.WriteLine("BYE");
-                System.Environment.Exit
+                System.Environment.Exit(0);
             }
         }
     }
@@ -36,18 +36,23 @@ namespace CMP1903MA2
             Console.Write("Do you wish to play against a [local] player or the Computer?\nC for Computer, L for Local Player:\t");
             ConsoleKeyInfo usrChoice = Console.ReadKey();
 
+            HumanPlayer P1 = new HumanPlayer();
+            HumanPlayer P2 = new HumanPlayer();
+            ComputerPlayer C1 = new ComputerPlayer();
+            ComputerPlayer c2 = new ComputerPlayer();
 
+            List<int> roll1 =  P1.ROLLS(6);
+            P1.ScoreCalc(roll1);
             if (usrChoice.Key == ConsoleKey.C)
             {
-                HumanPlayer P1 = new HumanPlayer();
-                ComputerPlayer P2 = new ComputerPlayer();
+                ;
             }
             else if (usrChoice.Key == ConsoleKey.L)
             {
-                HumanPlayer P1 = new HumanPlayer();
-                HumanPlayer P2 = new HumanPlayer();
+                ;
             }
-            while (P1.Score < winScore | P2.Score < winScore)
+
+            while ((P1.Score < winScore) || (P2.Score < winScore))
             {
 
             }
@@ -59,7 +64,7 @@ namespace CMP1903MA2
     /// <summary>
     /// The player.
     /// </summary>
-    class Player
+    class Player : Die
     {
         private int score;
 
@@ -77,6 +82,23 @@ namespace CMP1903MA2
             get { return roll; }
             set { roll = value; }
         }
+        public int ScoreCalc(List<int> rnd_ints)
+        {
+            int score = 0;
+
+            var ranks =
+                rnd_ints.GroupBy(s => s)
+                .Where(g => g.count() > 1)
+                .select(k);
+                
+
+            public List<int> countScores(ranks)
+            {
+
+            }
+            return score;
+
+        }
     }
     class HumanPlayer : Player
     {
@@ -92,18 +114,14 @@ namespace CMP1903MA2
     /// The die.
     /// </summary>
     /// 
-    class ScoreCalc
-    {
-        Die Die = new Die();
-
-    }
+    
     class Die
     {
         /// <summary>
         /// Rolls the w.
         /// </summary>
         /// <param name="sides">The sides.</param>
-        public List<int> rolls(int sides)
+        public List<int> ROLLS(int sides)
         {
             List<int> roll = new List <int>();
             Random dieRoll = new Random();
