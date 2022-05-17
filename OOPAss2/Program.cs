@@ -9,7 +9,19 @@ namespace CMP1903MA2
         static void Main()
         {
             Game NewGame = new Game();
+            ConsoleKeyInfo usrChoice = Console.ReadKey();
+            NewGame.GameMain();
 
+            Console.WriteLine("to play again enter 1, enter 2 to quit");
+            if (usrChoice.Key == ConsoleKey.D1)
+            {
+                NewGame.GameMain();
+            }
+            else
+            {
+                Console.WriteLine("BYE");
+                System.Environment.Exit
+            }
         }
     }
 
@@ -18,11 +30,13 @@ namespace CMP1903MA2
     /// </summary>
     class Game
     {
-        static void GameMain()
+        public void GameMain()
         {
             int winScore = 50;
             Console.Write("Do you wish to play against a [local] player or the Computer?\nC for Computer, L for Local Player:\t");
             ConsoleKeyInfo usrChoice = Console.ReadKey();
+
+
             if (usrChoice.Key == ConsoleKey.C)
             {
                 HumanPlayer P1 = new HumanPlayer();
@@ -66,7 +80,7 @@ namespace CMP1903MA2
     }
     class HumanPlayer : Player
     {
-    
+        
     }
 
     class ComputerPlayer : Player
@@ -85,19 +99,17 @@ namespace CMP1903MA2
     }
     class Die
     {
-
         /// <summary>
         /// Rolls the w.
         /// </summary>
         /// <param name="sides">The sides.</param>
-        /// <returns><![CDATA[Dictionary<int,int>]]></returns>
-        public Dictionary<int, int> rolls(int sides)
+        public List<int> rolls(int sides)
         {
-            Dictionary<int, int> roll = new Dictionary<int, int>();
+            List<int> roll = new List <int>();
             Random dieRoll = new Random();
             for (int i = 0; i <= 5; i++)
             {
-                roll[i] = dieRoll.Next(1, sides);
+                roll.Add(dieRoll.Next(1,sides));
             }
             return roll;
         }
